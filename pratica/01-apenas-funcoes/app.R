@@ -1,35 +1,13 @@
 library(shiny)
+library(ggplot2)
 
 imdb <- readr::read_rds(here::here("dados/imdb.rds"))
 
-opcoes <- imdb |> 
-  dplyr::pull(generos) |> 
-  stringr::str_split(", ") |> 
-  unlist() |> 
-  unique() |> 
-  sort()
-# tentar fazer com a funcao tidyr::separate_rows()
-
 ui <- fluidPage(
-  sidebarLayout(
-    h1("IMDB"),
-    sidebarPanel(
-      selectInput(
-        "generos",
-        label = "Selecione um gênero",
-        choices = opcoes
-      )
-    ),
-    mainPanel(
-      plotOutput("grafico1"),
-      plotOutput("grafico2")
-    )
-  )
+  app_ui(imdb)
 )
 
-server <- function(input, output, session) {
-  
-}
+server <- app_server
 
 shinyApp(ui, server)
 
